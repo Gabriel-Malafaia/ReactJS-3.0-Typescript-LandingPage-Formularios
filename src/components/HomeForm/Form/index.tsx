@@ -1,7 +1,11 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormHeader } from "../FormHeader";
-import {FormHomePageContent,FormHomePageContainer,FormHomePage} from "./styles";
+import {
+  FormHomePageContent,
+  FormHomePageContainer,
+  FormHomePage,
+} from "./styles";
 import { validateFormHome } from "../../../services/Validations";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
@@ -9,8 +13,10 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import { Button, FormHelperText } from "@mui/material";
+import { useContextHome } from "../../../context/Home";
+import { useEffect } from "react";
 
-interface IHomeForm {
+export interface IHomeForm {
   name: string;
   email: string;
   cellphone: string;
@@ -20,15 +26,21 @@ interface IHomeForm {
 }
 
 export const HomeForm = () => {
+  const { country, setActualCountry, actualCities, whenHandleSubmit } =
+    useContextHome();
+
   const {
     register,
     formState: { errors },
     handleSubmit,
+    watch,
+    getValues,
   } = useForm<IHomeForm>({ resolver: yupResolver(validateFormHome) });
 
-  const whenHandleSubmit = (data: IHomeForm) => {
-    console.log(data);
-  };
+  useEffect(() => {
+    setActualCountry(getValues("country"));
+    return;
+  }, [watch().country]);
 
   return (
     <FormHomePageContainer>
@@ -39,7 +51,7 @@ export const HomeForm = () => {
           <TextField
             {...register("name")}
             id="outlined-basic"
-            label="Nome"
+            label="Nome *"
             variant="outlined"
             error={!!errors.name}
             helperText={errors.name?.message}
@@ -48,7 +60,7 @@ export const HomeForm = () => {
           <TextField
             {...register("email")}
             id="outlined-basic"
-            label="Email"
+            label="Email *"
             variant="outlined"
             error={!!errors.email}
             helperText={errors.email?.message}
@@ -56,8 +68,9 @@ export const HomeForm = () => {
 
           <TextField
             {...register("cellphone")}
+            type={"number"}
             id="outlined-basic"
-            label="Telefone"
+            label="Telefone *"
             variant="outlined"
             error={!!errors.cellphone}
             helperText={errors.cellphone?.message}
@@ -65,41 +78,52 @@ export const HomeForm = () => {
 
           <TextField
             {...register("cpf")}
+            type={"number"}
             id="outlined-basic"
-            label="Cpf"
+            label="Cpf *"
             variant="outlined"
             error={!!errors.cpf}
             helperText={errors.cpf?.message}
           />
 
           <FormControl fullWidth error={!!errors.country}>
-            <InputLabel id="country">País</InputLabel>
+            <InputLabel id="country">País *</InputLabel>
             <Select
               {...register("country")}
               labelId="country"
               id="country"
-              label="País"
+              label="País *"
               defaultValue=""
             >
-              <MenuItem value={"10"}>Brasil</MenuItem>
-              <MenuItem value={"20"}>Eua</MenuItem>
-              <MenuItem value={"30"}>China</MenuItem>
+              {country.map(({ code, name_ptbr }) => {
+                return (
+                  <MenuItem key={code} value={code}>
+                    {name_ptbr}
+                  </MenuItem>
+                );
+              })}
             </Select>
             <FormHelperText>{errors.country?.message}</FormHelperText>
           </FormControl>
 
           <FormControl fullWidth error={!!errors.city}>
-            <InputLabel id="city">Cidade</InputLabel>
+            <InputLabel id="city">Cidade *</InputLabel>
             <Select
               {...register("city")}
               labelId="city"
               id="city"
-              label="Cidade"
+              label="Cidade *"
               defaultValue=""
+              disabled={actualCities.length <= 0}
             >
-              <MenuItem value={"40"}>Rio</MenuItem>
-              <MenuItem value={"50"}>New York</MenuItem>
-              <MenuItem value={"60"}>Xangai</MenuItem>
+              {actualCities &&
+                actualCities.map(({ name_ptbr, code }) => {
+                  return (
+                    <MenuItem key={code} value={name_ptbr}>
+                      {name_ptbr}
+                    </MenuItem>
+                  );
+                })}
             </Select>
             <FormHelperText>{errors.city?.message}</FormHelperText>
           </FormControl>

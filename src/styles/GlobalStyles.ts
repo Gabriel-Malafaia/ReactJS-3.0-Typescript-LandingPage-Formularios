@@ -81,12 +81,12 @@ export const GlobalStyles = createGlobalStyle`
         border-spacing: 0;
     }
 
-    *{
+    * {
         box-sizing: border-box;
         font-family: 'Raleway', sans-serif;
     }
 
-    button, select{
+    button, select {
         cursor: pointer;
     }
     

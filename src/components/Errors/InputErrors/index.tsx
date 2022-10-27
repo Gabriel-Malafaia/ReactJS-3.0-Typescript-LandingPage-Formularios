@@ -1,4 +1,4 @@
-import { Text } from "../../../styles/TypograpyText";
+import { Text } from "../../../styles/components/Typography/styles";
 
 interface IInputErrorProps {
   message?: string;

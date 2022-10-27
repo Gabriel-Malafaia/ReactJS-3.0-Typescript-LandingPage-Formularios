@@ -1,3 +1,6 @@
-export const name = 'Gabriel'
-// Api paises https://amazon-api.sellead.com/country
-// https://amazon-api.sellead.com/city para
+import axios from "axios";
+
+export const api = axios.create({
+  baseURL: "https://amazon-api.sellead.com/",
+  timeout: 5000,
+});

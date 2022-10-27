@@ -8,5 +8,9 @@ export const IllustrationContainer = styled.div`
   width: 70%;
   height: 100%;
 
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
 `;
