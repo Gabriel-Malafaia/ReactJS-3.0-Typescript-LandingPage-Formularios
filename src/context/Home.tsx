@@ -14,6 +14,8 @@ export const HomeContextProvider = ({ children }: IProviderProps) => {
   const [actualCountry, setActualCountry] = useState("");
   const [actualCities, setActualCities] = useState<ICity[]>([]);
 
+  console.log(actualCities)
+
   const whenHandleSubmit = (data: IHomeForm) => {
     // Função que recebe os dados do usuário pra mandar possívelmente pra um backend
     // console.log(data);
@@ -36,8 +38,8 @@ export const HomeContextProvider = ({ children }: IProviderProps) => {
   }, []);
 
   useEffect(() => {
-    const actualCitiesFilter = city.filter(({ country_code }) => {
-      return country_code == actualCountry;
+    const actualCitiesFilter = city.filter(({ country_code, name_ptbr }) => {
+      return (country_code == actualCountry && name_ptbr);
     });
 
     setActualCities(actualCitiesFilter);
