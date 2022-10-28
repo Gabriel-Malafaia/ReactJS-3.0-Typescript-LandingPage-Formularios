@@ -12,13 +12,12 @@ export const validateFormHome = yup.object().shape({
     .max(64, "Deve ter no máximo 64 letras."),
   cpf: yup
     .string()
-    .required("Cpf obrigatório!")
-    .matches(/^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2})$/, "Cpf Inválido!"),
+    .required("CPF obrigatório!")
+    .matches(/^([0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2})$/, "CPF Inválido!"),
   cellphone: yup
     .string()
     .required("Telefone obrigatório!")
-    .min(11, "Deve conter no mínimo 11 Números.")
-    .max(16, "Máximo de 16 Números"),
+    .matches(/(\(\d{2}\)\s)(\d{4,5}\-\d{4})/g, "Telefone inválido!"),
   country: yup.string().required("País obrigatório!"),
   city: yup.string().required("Cidade obrigatória!"),
 });

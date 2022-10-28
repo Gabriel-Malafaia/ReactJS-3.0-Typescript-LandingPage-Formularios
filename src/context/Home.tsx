@@ -1,8 +1,13 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { IHomeForm } from "../components/HomeForm/Form";
-import {ICity,ICountry,IHomeContextProvider,IProviderProps} from "../interface/context";
+import {
+  ICity,
+  ICountry,
+  IHomeContextProvider,
+  IProviderProps,
+} from "../interface/context";
 import { api } from "../services/Api";
-import { toastSuccess } from "../styles/components/Toastify/toast";
+import { toastError, toastSuccess } from "../styles/components/Toastify/toast";
 
 export const HomeContext = createContext<IHomeContextProvider>(
   {} as IHomeContextProvider
@@ -14,16 +19,20 @@ export const HomeContextProvider = ({ children }: IProviderProps) => {
   const [actualCountry, setActualCountry] = useState("");
   const [actualCities, setActualCities] = useState<ICity[]>([]);
 
-
   const whenHandleSubmit = (data: IHomeForm) => {
     // Função que recebe os dados do usuário pra mandar possívelmente pra um backend
-    // console.log(data);
+    
+    if (data.city.includes(data.country)) {
+      toastSuccess("Bem vindo à Ally!");
 
-    toastSuccess("Bem vindo à Ally!");
+      setTimeout(() => {
+        window.open("https://allyhub.co/");
+      }, 2000);
 
-    setTimeout(() => {
-      window.open("https://allyhub.co/");
-    }, 2000);
+      return;
+    }
+
+    toastError("Cidade inválida!");
   };
 
   useEffect(() => {
@@ -38,7 +47,7 @@ export const HomeContextProvider = ({ children }: IProviderProps) => {
 
   useEffect(() => {
     const actualCitiesFilter = city.filter(({ country_code, name_ptbr }) => {
-      return (country_code == actualCountry && name_ptbr);
+      return country_code == actualCountry && name_ptbr;
     });
 
     setActualCities(actualCitiesFilter);

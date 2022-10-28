@@ -5,6 +5,7 @@ import {
   FormHomePageContent,
   FormHomePageContainer,
   FormHomePage,
+  StyledInput,
 } from "./styles";
 import { validateFormHome } from "../../../services/Validations";
 import Select from "@mui/material/Select";
@@ -12,9 +13,10 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import { Button, FormHelperText } from "@mui/material";
+import { Button, FormHelperText, IconButton, Tooltip } from "@mui/material";
 import { useContextHome } from "../../../context/Home";
 import { useEffect } from "react";
+import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
 
 export interface IHomeForm {
   name: string;
@@ -46,7 +48,6 @@ export const HomeForm = () => {
   useEffect(() => {
     setActualCountry(getValues("country"));
     resetField("city");
-    return;
   }, [watch().country]);
 
   return (
@@ -73,25 +74,41 @@ export const HomeForm = () => {
             helperText={errors.email?.message}
           />
 
-          <TextField
-            {...register("cellphone")}
-            type={"number"}
-            id="outlined-basic"
-            label="Telefone *"
-            variant="outlined"
-            error={!!errors.cellphone}
-            helperText={errors.cellphone?.message}
-          />
+          <FormControl error={!!errors.cellphone}>
+            <StyledInput
+              {...register("cellphone")}
+              error={!!errors.cellphone ? "true" : "false"}
+              placeholder="Telefone *"
+              mask={"(99) 99999-9999"}
+            />
+            <FormHelperText>{errors.cellphone?.message}</FormHelperText>
+            <Tooltip
+              className="tooltip"
+              title="Telefone deve estar no formato: (11) 11111-1111"
+            >
+              <IconButton>
+                <QuestionMarkIcon />
+              </IconButton>
+            </Tooltip>
+          </FormControl>
 
-          <TextField
-            {...register("cpf")}
-            type={"number"}
-            id="outlined-basic"
-            label="Cpf *"
-            variant="outlined"
-            error={!!errors.cpf}
-            helperText={errors.cpf?.message}
-          />
+          <FormControl error={!!errors.cpf}>
+            <StyledInput
+              error={!!errors.cpf ? "true" : "false"}
+              {...register("cpf")}
+              placeholder="CPF *"
+              mask={"999.999.999-99"}
+            />
+            <FormHelperText>{errors.cpf?.message}</FormHelperText>
+            <Tooltip
+              className="tooltip"
+              title="CPF: Deve estar no formato: 111.111.111-11"
+            >
+              <IconButton>
+                <QuestionMarkIcon />
+              </IconButton>
+            </Tooltip>
+          </FormControl>
 
           <FormControl fullWidth error={!!errors.country}>
             <InputLabel id="country">País *</InputLabel>
@@ -124,9 +141,12 @@ export const HomeForm = () => {
               disabled={actualCities.length <= 0}
             >
               {actualCities &&
-                actualCities.map(({ name_ptbr, code }) => {
+                actualCities.map(({ name_ptbr, code, country_code }) => {
                   return (
-                    <MenuItem key={code} value={name_ptbr}>
+                    <MenuItem
+                      key={code}
+                      value={`${name_ptbr} - ${country_code}`}
+                    >
                       {name_ptbr}
                     </MenuItem>
                   );
@@ -141,7 +161,12 @@ export const HomeForm = () => {
             </FormHelperText>
           </FormControl>
 
-          <Button type="submit" variant="contained" disableElevation>
+          <Button
+            className="send__button"
+            type="submit"
+            variant="contained"
+            disableElevation
+          >
             Enviar
           </Button>
         </FormHomePage>
