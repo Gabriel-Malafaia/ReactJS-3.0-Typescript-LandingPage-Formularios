@@ -14,7 +14,6 @@ export const HomeContextProvider = ({ children }: IProviderProps) => {
   const [actualCountry, setActualCountry] = useState("");
   const [actualCities, setActualCities] = useState<ICity[]>([]);
 
-  console.log(actualCities)
 
   const whenHandleSubmit = (data: IHomeForm) => {
     // Função que recebe os dados do usuário pra mandar possívelmente pra um backend

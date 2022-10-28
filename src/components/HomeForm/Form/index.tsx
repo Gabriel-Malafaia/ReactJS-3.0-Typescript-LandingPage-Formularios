@@ -26,8 +26,13 @@ export interface IHomeForm {
 }
 
 export const HomeForm = () => {
-  const { country, setActualCountry, actualCities, whenHandleSubmit } =
-    useContextHome();
+  const {
+    country,
+    setActualCountry,
+    actualCities,
+    actualCountry,
+    whenHandleSubmit,
+  } = useContextHome();
 
   const {
     register,
@@ -35,10 +40,12 @@ export const HomeForm = () => {
     handleSubmit,
     watch,
     getValues,
+    resetField,
   } = useForm<IHomeForm>({ resolver: yupResolver(validateFormHome) });
 
   useEffect(() => {
     setActualCountry(getValues("country"));
+    resetField("city");
     return;
   }, [watch().country]);
 
@@ -126,6 +133,12 @@ export const HomeForm = () => {
                 })}
             </Select>
             <FormHelperText>{errors.city?.message}</FormHelperText>
+            <FormHelperText>
+              {!errors.city &&
+                actualCountry &&
+                actualCities.length <= 0 &&
+                "Nenhuma cidade encontrada!"}
+            </FormHelperText>
           </FormControl>
 
           <Button type="submit" variant="contained" disableElevation>
