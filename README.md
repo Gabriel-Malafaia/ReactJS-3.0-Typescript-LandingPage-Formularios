@@ -28,7 +28,7 @@
 
 ![mobile](https://user-images.githubusercontent.com/106371099/198822259-d6acc515-1952-443b-ae1f-daabff500ce3.png)
 <p align="center">
-  <img width="460" height="300" src="https://i.imgur.com/eSFCARE.png">
+  <img src="https://i.imgur.com/eSFCARE.png">
 </p>
 
 ## Vamos nos conectar?
