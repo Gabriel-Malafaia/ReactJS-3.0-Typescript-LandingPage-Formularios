@@ -27,9 +27,10 @@
 - <a href="https://react-entrega-kenzie-hub-gabriel-malafaia.vercel.app/">Link do projeto</a>
 
 ![mobile](https://user-images.githubusercontent.com/106371099/198822259-d6acc515-1952-443b-ae1f-daabff500ce3.png)
-<div align:center>
- ![mobile (1)](https://user-images.githubusercontent.com/106371099/198822275-486d5507-76c4-4e96-ac18-4bc14cd07d8b.png)
- </div>
+ 
+ <p align="center">
+   ![mobile (1)](https://user-images.githubusercontent.com/106371099/198822275-486d5507-76c4-4e96-ac18-4bc14cd07d8b.png)
+</p>
 
 ## Vamos nos conectar?
 - [Linkedin](https://www.linkedin.com/in/gabrielmalafaia/)
