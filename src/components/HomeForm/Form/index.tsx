@@ -163,7 +163,7 @@ export const HomeForm = () => {
           <Controller
             name="city"
             control={control}
-            defaultValue={[""]}
+            defaultValue={[]}
             render={({ field: { value, onChange, ...rest } }) => (
               <Autocomplete
                 onChange={(event, newValue) => {
