@@ -1,54 +1,46 @@
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormHeader } from "../FormHeader";
-import {
-  FormHomePageContent,
-  FormHomePageContainer,
-  FormHomePage,
-  StyledInput,
-} from "./styles";
+import {FormHomePageContent,FormHomePageContainer,FormHomePage,StyledInput} from "./styles";
+import {Autocomplete,Button,FormHelperText,IconButton,Tooltip} from "@mui/material";
+import { useContextHome } from "../../../context/Home";
 import { validateFormHome } from "../../../services/Validations";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import { Button, FormHelperText, IconButton, Tooltip } from "@mui/material";
-import { useContextHome } from "../../../context/Home";
-import { useEffect } from "react";
 import QuestionMarkIcon from "@mui/icons-material/QuestionMark";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import Checkbox from "@mui/material/Checkbox";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export interface IHomeForm {
   name: string;
   email: string;
   cellphone: string;
   cpf: string;
-  country: string;
-  city: string;
+  country: string[];
+  city: string[];
 }
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export const HomeForm = () => {
   const {
-    country,
-    setActualCountry,
-    actualCities,
-    actualCountry,
     whenHandleSubmit,
+    country,
+    actualCities,
+    setCountryCodesSelected,
+    open,
   } = useContextHome();
+  const loading = open && country.length === 0;
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-    watch,
-    getValues,
-    resetField,
+    control,
   } = useForm<IHomeForm>({ resolver: yupResolver(validateFormHome) });
-
-  useEffect(() => {
-    setActualCountry(getValues("country"));
-    resetField("city");
-  }, [watch().country]);
 
   return (
     <FormHomePageContainer>
@@ -110,56 +102,108 @@ export const HomeForm = () => {
             </Tooltip>
           </FormControl>
 
-          <FormControl fullWidth error={!!errors.country}>
-            <InputLabel id="country">País *</InputLabel>
-            <Select
-              {...register("country")}
-              labelId="country"
-              id="country"
-              label="País *"
-              defaultValue=""
-            >
-              {country.map(({ code, name_ptbr }) => {
-                return (
-                  <MenuItem key={code} value={code}>
-                    {name_ptbr}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-            <FormHelperText>{errors.country?.message}</FormHelperText>
-          </FormControl>
-
-          <FormControl fullWidth error={!!errors.city}>
-            <InputLabel id="city">Cidade *</InputLabel>
-            <Select
-              {...register("city")}
-              labelId="city"
-              id="city"
-              label="Cidade *"
-              defaultValue=""
-              disabled={actualCities.length <= 0}
-            >
-              {actualCities &&
-                actualCities.map(({ name_ptbr, code, country_code }) => {
-                  return (
-                    <MenuItem
-                      key={code}
-                      value={`${name_ptbr} - ${country_code}`}
-                    >
-                      {name_ptbr}
-                    </MenuItem>
+          <Controller
+            name="country"
+            control={control}
+            render={({ field: { value, onChange, ...rest } }) => (
+              <Autocomplete
+                onChange={(event, newValue) => {
+                  const countryCodes = newValue.map((elem) => elem.code);
+                  const countryCodesName = newValue.map(
+                    (elem) => `${elem.code}`
                   );
-                })}
-            </Select>
-            <FormHelperText>{errors.city?.message}</FormHelperText>
-            <FormHelperText>
-              {!errors.city &&
-                actualCountry &&
-                actualCities.length <= 0 &&
-                "Nenhuma cidade encontrada!"}
-            </FormHelperText>
-          </FormControl>
+                  setCountryCodesSelected(countryCodes);
+                  onChange(countryCodesName);
+                }}
+                fullWidth
+                multiple
+                limitTags={3}
+                id="checkboxes-tags-demo"
+                options={country}
+                loading={loading}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.name_ptbr}
+                renderOption={(props, option, { selected }) => {
+                  return (
+                    <li {...props}>
+                      <Checkbox
+                        icon={icon}
+                        checkedIcon={checkedIcon}
+                        style={{ marginRight: 8 }}
+                        checked={selected}
+                      />
+                      {option.name_ptbr}
+                    </li>
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    error={!!errors.country}
+                    {...params}
+                    label="Países de Interesse"
+                    placeholder="Favoritos"
+                    helperText={errors.country?.message}
+                    InputProps={{
+                      ...params.InputProps,
+                      endAdornment: (
+                        <>
+                          {loading ? (
+                            <CircularProgress color="inherit" size={20} />
+                          ) : null}
+                          {params.InputProps.endAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                )}
+              />
+            )}
+          />
+
+          <Controller
+            name="city"
+            control={control}
+            defaultValue={[""]}
+            render={({ field: { value, onChange, ...rest } }) => (
+              <Autocomplete
+                onChange={(event, newValue) => {
+                  const citiesCodes = newValue.map(
+                    (elem) => `${elem.name_ptbr} - ${elem.country_code}`
+                  );
+                  onChange(citiesCodes);
+                }}
+                fullWidth
+                multiple
+                limitTags={3}
+                id="checkboxes-tags-demo"
+                options={actualCities}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.name_ptbr}
+                renderOption={(props, option, { selected }) => {
+                  return (
+                    <li {...props}>
+                      <Checkbox
+                        icon={icon}
+                        checkedIcon={checkedIcon}
+                        style={{ marginRight: 8 }}
+                        checked={selected}
+                      />
+                      {option.name_ptbr}
+                    </li>
+                  );
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    error={!!errors.city}
+                    {...params}
+                    label="Cidades de Interesse"
+                    placeholder="Favoritos"
+                    helperText={errors.city?.message}
+                  />
+                )}
+              />
+            )}
+          />
 
           <Button
             className="send__button"

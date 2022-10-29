@@ -18,6 +18,12 @@ export const validateFormHome = yup.object().shape({
     .string()
     .required("Telefone obrigatório!")
     .matches(/(\(\d{2}\)\s)(\d{4,5}\-\d{4})/g, "Telefone inválido!"),
-  country: yup.string().required("País obrigatório!"),
-  city: yup.string().required("Cidade obrigatória!"),
+  country: yup
+    .array()
+    .min(1, "País(es) obrigatório(s)!")
+    .required("País(es) obrigatório(s)!"),
+  city: yup
+    .array()
+    .min(1, "Cidade(s) obrigatória(s)!")
+    .required("Cidade(s) obrigatória(s)!"),
 });

@@ -4,10 +4,12 @@ import { IHomeForm } from "../components/HomeForm/Form";
 export interface IHomeContextProvider {
   country: ICountry[];
   city: ICity[];
-  actualCountry: string;
-  setActualCountry: React.Dispatch<React.SetStateAction<string>>;
   actualCities: ICity[];
   whenHandleSubmit: (data: IHomeForm) => void;
+  countryCodesSelected: string[];
+  setCountryCodesSelected: React.Dispatch<React.SetStateAction<string[]>>;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface IProviderProps {
