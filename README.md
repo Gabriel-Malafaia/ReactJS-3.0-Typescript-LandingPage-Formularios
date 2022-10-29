@@ -23,7 +23,7 @@
 - Consumo de Api para os selects da aplicação.
 
 ## 📱 Preview 
-<p align="center"> - <a href="https://react-entrega-kenzie-hub-gabriel-malafaia.vercel.app/">Link do projeto</a> </p>
+<p align="center"> - <a href="https://ally-technical.vercel.app/">Link do projeto</a> </p>
 
 ![mobile](https://user-images.githubusercontent.com/106371099/198822259-d6acc515-1952-443b-ae1f-daabff500ce3.png)
 <p align="center">
