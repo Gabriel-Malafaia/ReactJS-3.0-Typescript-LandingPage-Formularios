@@ -4,8 +4,8 @@
 - Uma landing page responsiva com a intenção de explorar bibliotecas de estilização / máscaras de inputs e validações de formulário.
 
 ## 💻 Tecnologias
-- React
-- Typescript
+- React.
+- Typescript.
 
 ## 🔮 Bibliotecas
 
